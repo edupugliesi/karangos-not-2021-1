@@ -3,7 +3,6 @@ import axios from 'axios'
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -35,11 +34,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function KarangosList() {
+export default function ClientesList() {
   const classes = useStyles()
 
   // Variáveis que conterão dados PRECISAM ser inicializadas como vetores vazios
-  const [karangos, setKarangos] = useState([])
+  const [clientes, setClientes] = useState([])
   const [deletable, setDeletable] = useState()        // Código do registro a ser excluído
   const [dialogOpen, setDialogOpen] = useState(false) // O diálogo de confirmação está aberto?
   const [sbOpen, setSbOpen] = useState(false)
@@ -57,8 +56,8 @@ export default function KarangosList() {
   async function getData() {
     try { // tenta buscar os dados
       setGridLoading(true)
-      let response = await axios.get('https://api.faustocintra.com.br/karangos?by=marca,modelo')
-      if(response.data.length > 0) setKarangos(response.data)
+      let response = await axios.get('https://api.faustocintra.com.br/clientes?by=nome')
+      if(response.data.length > 0) setClientes(response.data)
     }
     catch(error) {
       console.error(error)
@@ -68,7 +67,7 @@ export default function KarangosList() {
 
   async function deleteItem() {
     try {
-      await axios.delete(`https://api.faustocintra.com.br/karangos/${deletable}`)
+      await axios.delete(`https://api.faustocintra.com.br/clientes/${deletable}`)
       getData()     // Atualiza os dados da tabela
       setSbSeverity('success')
       setSbMessage('Exclusão efetuada com sucesso.')
@@ -107,57 +106,29 @@ export default function KarangosList() {
       sortComparator: (v1, v2) => Number(v1) > Number(v2) ? 1 : -1
     },
     { 
-      field: 'marca', 
-      headerName: 'Marca',
+      field: 'nome', 
+      headerName: 'Nome',
       flex: true 
     },
     { 
-      field: 'modelo', 
-      headerName: 'Modelo',
+      field: 'municipio', 
+      headerName: 'Municipio',
       flex: true 
     },
     { 
-      field: 'cor', 
-      headerName: 'Cor',
-      align: 'center',
-      headerAlign: 'center', 
+      field: 'uf', 
+      headerName: 'Estado',
       flex: true 
     },
     { 
-      field: 'ano_fabricacao', 
-      headerName: 'Ano',
-      align: 'center',
-      headerAlign: 'center', 
-      flex: true,
-      sortComparator: (v1, v2) => Number(v1) > Number(v2) ? 1 : -1 
-    },
-    { 
-      field: 'importado', 
-      headerName: 'Importado?',
-      align: 'center', 
-      headerAlign: 'center', 
-      flex: true,
-      renderCell: params => (
-        <Checkbox checked={params.value === "1"} readOnly />
-      )
-    },
-    { 
-      field: 'placa', 
-      headerName: 'Placa',
-      align: 'center', 
-      headerAlign: 'center', 
+      field: 'telefone', 
+      headerName: 'Telefone',
       flex: true 
     },
     { 
-      field: 'preco', 
-      headerName: 'Preço',
-      align: 'right', 
-      headerAlign: 'right', 
-      flex: true,
-      valueFormatter: params => (
-        Number(params.value).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
-      ),
-      sortComparator: (v1, v2) => Number(v1) > Number(v2) ? 1 : -1
+      field: 'email', 
+      headerName: 'E-mail',
+      flex: true 
     },
     { 
       field: 'editar',
@@ -188,7 +159,7 @@ export default function KarangosList() {
   return (
     <>
       <ConfirmDialog isOpen={dialogOpen} onClose={handleDialogClose}>
-        Deseja realmente excluir este karango?
+        Deseja realmente excluir este cliente?
       </ConfirmDialog>
       
       <Snackbar open={sbOpen} autoHideDuration={6000} onClose={handleSbClose}>
@@ -197,15 +168,15 @@ export default function KarangosList() {
         </MuiAlert>
       </Snackbar>
       
-      <h1 onClick={() => getData()}>Listagem de Karangos</h1>
+      <h1 onClick={() => getData()}>Listagem de Clientes</h1>
       <Toolbar className={classes.toolbar}>
         <Button color="secondary" variant="contained" size="large" 
-          startIcon={<AddBoxIcon />} onClick={() => history.push('/new')}>
-          Novo Karango
+          startIcon={<AddBoxIcon />} onClick={() => history.push('/new2')}>
+          Novo Cliente
         </Button>
       </Toolbar>
       <Paper elevation={4}>
-        <DataGrid className={classes.dataGrid} rows={karangos} columns={columns} pageSize={10} autoHeight={true} loading={gridLoading} disableSelectionOnClick={true} />
+        <DataGrid className={classes.dataGrid} rows={clientes} columns={columns} pageSize={10} autoHeight={true} loading={gridLoading} disableSelectionOnClick={true} />
       </Paper>
     </>
   )

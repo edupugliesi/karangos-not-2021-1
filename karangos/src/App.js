@@ -31,6 +31,8 @@ import { Box } from '@material-ui/core'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import KarangosList from './routed/KarangosList2'
 import KarangosForm from './routed/KarangosForm'
+import ClientesForm from './routed/ClientesForm'
+import ClientesList from './routed/ClientesList'
 
 const theme = createMuiTheme({
   palette: {
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   box: {
     backgroundColor: theme.palette.background.default,
     minHeight: '100vh',  // 100% da altura da área visível
-    paddingBottom: '42px' // Para que o conteúdio bnão fique escondido atrás do footer
+    paddingBottom: '42px' // Para que o conteúdo não fique escondido atrás do footer
   },
   routed: {
     padding: '25px',
@@ -69,6 +71,16 @@ function Main() {
               <KarangosList />
             </Route>
             <Route path="/new">
+              <KarangosForm />
+            </Route>
+            <Route path="/new2">
+              <ClientesForm />
+            </Route>
+            <Route path="/list2">
+              <ClientesList />
+            </Route>
+            {/* :id é um parâmetro (nomes de parâmetros começam com dois pontos) */}
+            <Route path="/edit/:id">
               <KarangosForm />
             </Route>
           </Switch>

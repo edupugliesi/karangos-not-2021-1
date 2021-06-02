@@ -50,51 +50,51 @@ export default function KarangosList() {
   // É importante inicializar esta variável de estado como um vetor vazio
   const [karangos, setKarangos] = useState([])
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [deletable, setDeletable] = useState() // Cod. do registro a ser excluído
+  const [deletable, setDeletable] = useState() // Cód. do registro a ser excluído
   const [snackState, setSnackState] = useState({
     open: false,
-    severity: 'sucess',
-    message: 'Karango excluído com sucesso'
+    severity: 'success',
+    message: 'Karango excluído com sucesso'  
   })
 
-  function handleDialogClose(result){
+  function handleDialogClose(result) {
     setDialogOpen(false)
     if(result) deleteItem()
   }
 
-  function handleDeleteClick(id){
+  function handleDeleteClick(id) {
     setDeletable(id)
     setDialogOpen(true)
   }
 
-  async function deleteItem(){
-    try{
+  async function deleteItem() {
+    try {
       await axios.delete(`https://api.faustocintra.com.br/karangos/${deletable}`)
-      getData() // Atualiza os dados da tabela
-      setSnackState({... snackState, open: true}) // Exibe a snackbar de sucesso
+      getData()   // Atualiza os dados da tabela
+      setSnackState({...snackState, open: true}) // Exibe a snackbar de sucesso    
     }
-    catch(error){
+    catch(error) {
       // Mostra a snackbar de erro
       setSnackState({
         open: true,
-        severy: 'error',
-        message: 'Erro: ' + error.message
+        severity: 'error',
+        message: 'ERRO: ' + error.message
       })
-    } 
+    }
   }
 
-  
-    async function getData(){
-      try {
-        let response = await axios.get('https://api.faustocintra.com.br/karangos?by=marca,modelo')
-        if(response.data.length > 0) setKarangos(response.data)
-      }
-      catch(error) {
-        console.error(error)
-      }
+  async function getData() {
+    try {
+      let response = await axios.get('https://api.faustocintra.com.br/karangos?by=marca,modelo')
+      if(response.data.length > 0) setKarangos(response.data)
     }
+    catch(error) {
+      console.error(error)
+    }
+  }
 
   useEffect(() => {
+    
     getData()
   }, [])  // Quando a dependência de um useEffect é um vetor vazio, isso indica
           // que ele será executado apenas uma vez, na inicialização do componente
@@ -114,13 +114,13 @@ export default function KarangosList() {
       <ConfirmDialog isOpen={dialogOpen} onClose={handleDialogClose}>
         Deseja realmente excluir este karango?
       </ConfirmDialog>
-
+      
       <Snackbar open={snackState.open} autoHideDuration={6000} onClose={handleSnackClose}>
         <Alert onClose={handleSnackClose} severity={snackState.severity}>
           {snackState.message}
         </Alert>
       </Snackbar>
-
+      
       <h1>Listagem de Karangos</h1>
       <Toolbar className={classes.toolbar} >
         <Button color="secondary" variant="contained" size="large" 
