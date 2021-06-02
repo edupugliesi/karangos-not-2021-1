@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
     '& .MuiFormControl-root' : {
       minWidth: '200px',
       maxWidth: '500px',
-      marginBottom: '24px',
+      marginBottom: '25px',
     }
   },
   toolbar: {
